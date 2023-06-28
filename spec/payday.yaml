@@ -1,0 +1,468 @@
+openapi: 3.0.0
+x-stoplight:
+  id: fpuamr0wxwsd4
+info:
+  title: payday
+  version: 0.0.1
+  description: 'REST API spec for the PayDay web application '
+  contact:
+    name: Arthurdw
+    url: www.arthurdw.com
+    email: dev@arthurdw.com
+servers:
+  - url: 'http://localhost:3000'
+paths:
+  /login:
+    post:
+      summary: Sign in
+      operationId: post-login
+      responses:
+        '200':
+          $ref: '#/components/responses/Token'
+        '401':
+          $ref: '#/components/responses/Error'
+      description: Create a new JWT token
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserAuth'
+            examples: {}
+      tags:
+        - user
+  /register:
+    post:
+      summary: Register
+      operationId: post-register
+      responses:
+        '200':
+          $ref: '#/components/responses/Token'
+      description: Register as a new user
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserAuth'
+      tags:
+        - user
+  /sources:
+    get:
+      summary: All sources
+      tags:
+        - sources
+      responses:
+        '200':
+          $ref: '#/components/responses/Sources'
+        '404':
+          $ref: '#/components/responses/Error'
+      operationId: get-sources
+      description: 'Shows all sources that exist, regardless of if they are used'
+      parameters:
+        - schema:
+            type: number
+            default: 1
+          in: query
+          name: page
+          description: Current page for the pagination
+        - schema:
+            type: number
+            default: 15
+          in: query
+          name: limit
+          description: Limit of items per page
+    put:
+      summary: Add new source
+      operationId: put-sources
+      responses:
+        '201':
+          description: Created
+        '401':
+          $ref: '#/components/responses/Error'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Source'
+      tags:
+        - sources
+      description: Create a new source
+  '/sources/{source}':
+    parameters:
+      - schema:
+          type: string
+        name: source
+        in: path
+        required: true
+    patch:
+      summary: Update source
+      operationId: patch-sources-source
+      responses:
+        '200':
+          description: OK
+        '401':
+          $ref: '#/components/responses/Error'
+        '404':
+          $ref: '#/components/responses/Error'
+      tags:
+        - sources
+      description: Update a source its values
+      requestBody:
+        content:
+          application/json:
+            schema:
+              anyOf:
+                - properties:
+                    name:
+                      type: string
+                - properties:
+                    imageUrl:
+                      type: string
+                - properties:
+                    type:
+                      type: string
+                - properties:
+                    descriptionEnglish:
+                      type: string
+                - properties:
+                    descriptionDutch:
+                      type: string
+              type: object
+            examples: {}
+    delete:
+      summary: Delete source
+      operationId: delete-sources-source
+      responses:
+        '200':
+          description: OK
+        '401':
+          $ref: '#/components/responses/Error'
+        '404':
+          $ref: '#/components/responses/Error'
+      tags:
+        - sources
+      description: 'Delete source, the path parameter should be the id'
+  /balances:
+    get:
+      summary: All balances
+      tags:
+        - balance
+      responses:
+        '200':
+          $ref: '#/components/responses/Balances'
+        '401':
+          $ref: '#/components/responses/Error'
+      operationId: get-balance
+      description: Get all balances of the current user
+      parameters:
+        - schema:
+            type: number
+            default: 15
+          in: query
+          name: limit
+          description: The amount of items per page
+        - schema:
+            type: number
+            default: 1
+          in: query
+          name: page
+          description: The current page
+    parameters: []
+    post:
+      summary: Add new balance record
+      operationId: post-balances
+      responses:
+        '200':
+          description: OK
+        '401':
+          $ref: '#/components/responses/Error'
+      tags:
+        - balance
+      description: Create a new balance record
+  '/balance/{balanceId}':
+    parameters:
+      - schema:
+          type: string
+        name: balanceId
+        in: path
+        required: true
+    delete:
+      summary: Delete a balance record
+      operationId: delete-balance-balance
+      responses:
+        '200':
+          description: OK
+        '401':
+          $ref: '#/components/responses/Error'
+        '404':
+          $ref: '#/components/responses/Error'
+      tags:
+        - balance
+      description: 'Delete a balance record (does not edit past statistics, as these are not recalculated)'
+  /analytics/overview:
+    get:
+      summary: General analytics
+      tags:
+        - analytics
+      responses:
+        '200':
+          $ref: '#/components/responses/Overview'
+        '401':
+          $ref: '#/components/responses/Error'
+      operationId: get-analytics-overview
+      description: 'General analytics, these compare the curent month to the last month'
+  '/analytics/overview/{source}':
+    parameters:
+      - schema:
+          type: string
+        name: source
+        in: path
+        required: true
+    get:
+      summary: Source specific overview
+      tags:
+        - analytics
+        - sources
+      responses:
+        '200':
+          $ref: '#/components/responses/Overview'
+        '401':
+          $ref: '#/components/responses/Error'
+        '404':
+          $ref: '#/components/responses/Error'
+      operationId: get-analytics-overview-source
+      description: 'Same as the general overview, but only shows the data for one source'
+  /analytics/statistics:
+    get:
+      summary: General statistics
+      tags:
+        - analytics
+      responses:
+        '200':
+          $ref: '#/components/responses/Statistics'
+        '401':
+          $ref: '#/components/responses/Error'
+      operationId: get-analytics-statistics
+      description: The progress of the user and their money management in numbers
+  '/analytics/statistics/{source}':
+    parameters:
+      - schema:
+          type: string
+        name: source
+        in: path
+        required: true
+    get:
+      summary: Source specific statistics
+      tags:
+        - analytics
+        - sources
+      responses:
+        '200':
+          $ref: '#/components/responses/Statistics'
+        '401':
+          $ref: '#/components/responses/Error'
+        '404':
+          $ref: '#/components/responses/Error'
+      operationId: get-analytics-statistics-source
+      description: Same as the general endpoint but only for one resource
+components:
+  schemas:
+    Overview:
+      title: Overview
+      x-stoplight:
+        id: vw784byf7ucka
+      type: object
+      properties:
+        income:
+          type: object
+          properties:
+            current:
+              type: integer
+            lastMonth:
+              type: integer
+        passiva:
+          type: object
+          properties:
+            current:
+              type: integer
+            lastMonth:
+              type: integer
+        cashflow:
+          type: object
+          properties:
+            current:
+              type: integer
+            lastMonth:
+              type: integer
+        portfolio:
+          type: object
+          properties:
+            current:
+              type: integer
+            lastMonth:
+              type: integer
+      description: 'Provides a general overview of the user their expenses compared to last month, this way they can see how they are doing'
+    Statistics:
+      title: Statistics
+      x-stoplight:
+        id: t3i6ks70npjsa
+      type: object
+      properties:
+        activa:
+          type: array
+          items:
+            type: integer
+        passiva:
+          type: array
+          items:
+            type: integer
+        cashflow:
+          type: array
+          items:
+            type: integer
+        portfolio:
+          type: array
+          items:
+            type: integer
+      description: See the evolution of the user their money management
+    Source:
+      title: Source
+      x-stoplight:
+        id: 817s0u4r5gjl7
+      type: object
+      description: Represents a company or source for a balance
+      properties:
+        name:
+          type: string
+        imageUrl:
+          type: string
+        type:
+          type: string
+        descriptionEnglish:
+          type: string
+        descriptionDutch:
+          type: string
+    BalanceItem:
+      title: BalanceItem
+      x-stoplight:
+        id: jm89vce079yge
+      type: object
+      properties:
+        in:
+          type: integer
+        out:
+          type: string
+        subscription:
+          type: boolean
+        company:
+          type: string
+    UserAuth:
+      type: object
+      properties:
+        name:
+          type: string
+        password:
+          type: string
+      x-examples:
+        Example 1:
+          name: string
+          password: string
+      description: User authentication representation
+  responses:
+    Sources:
+      description: A collection of sources
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              allOf:
+                - type: object
+                  properties:
+                    id:
+                      type: string
+                - $ref: '#/components/schemas/Source'
+          examples: {}
+    Statistics:
+      description: 'A collection of activa, expenses, cashflow and your portfolio'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Statistics'
+          examples:
+            Realistic data:
+              value:
+                activa:
+                  - 50000
+                  - 35000
+                  - 45000
+                  - 60000
+                  - 55000
+                  - 40000
+                  - 48000
+                passiva:
+                  - 30000
+                  - 25000
+                  - 28000
+                  - 32000
+                  - 35000
+                  - 40000
+                  - 42000
+                cashflow:
+                  - 12000
+                  - 15000
+                  - -8000
+                  - 10000
+                  - 13000
+                  - 9000
+                  - 6000
+                portfolio:
+                  - 20000
+                  - 18000
+                  - 22000
+                  - 24000
+                  - 28000
+                  - 32000
+                  - 36000
+    Overview:
+      description: 'Simple comparison to last month of your income, expenses, cashflow an portfolio'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Overview'
+    Balances:
+      description: All balances
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              allOf:
+                - type: object
+                  properties:
+                    id:
+                      type: string
+                - $ref: '#/components/schemas/BalanceItem'
+    Error:
+      description: Error response
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+    Token:
+      description: JWT token response
+      content:
+        application/json:
+          schema:
+            properties:
+              id:
+                type: string
+      headers: {}
+tags:
+  - name: user
+  - name: sources
+  - name: balance
+  - name: analytics
+
