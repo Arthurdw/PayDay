@@ -18,23 +18,27 @@ PayDay is a personal finance app built with Laravel and Vue TypeScript. It allow
 
 ## Future Enhancements
 
-Although the Laravel code may not be a point of pride, the Vue client code is intriguing and showcases the app's potential. In future iterations, I plan to adopt a more test-driven development approach, ensuring robustness and reliability. Additionally, we will prioritize internationalization to make the app accessible to a wider audience.
+Although the Laravel code may not be a point of pride, the Vue client code is intriguing and showcases the app's potential. In future iterations, I plan to adopt a more test-driven development approach, ensuring robustness and reliability. Additionally, we will prioritize internationalization to make the app accessible to a broader audience.
 
 ## Getting Started
 
 To get started with PayDay, follow these steps:
 
 1. Clone this repository.
-2. Run the server with a php environment (eg. [Vagrant](https://www.vagrantup.com/))
-3. Install all packages in the client repository and run start with your favorite package manager. (reccomended: [pnpm](https://pnpm.io/))
+2. Run the server with a PHP environment (eg. [Vagrant](https://www.vagrantup.com/))
+3. Install all packages in the client repository and start with your favorite package manager. (recommended: [pnpm](https://pnpm.io/))
 
 ## Demo images
 
-// TODO: ADD
+![login](https://github.com/Arthurdw/PayDay/assets/38541241/e22061a1-f9f3-471d-bba0-0e815bdbe57c)
+![register](https://github.com/Arthurdw/PayDay/assets/38541241/f86f8344-2c29-4c52-8702-8e509a3e6a48)
+![main](https://github.com/Arthurdw/PayDay/assets/38541241/640d6485-10a6-4885-84f9-6861174aac6f)
+![sources](https://github.com/Arthurdw/PayDay/assets/38541241/27e4ea43-329f-4d9d-bfbe-dccdcea69b55)
+![balances](https://github.com/Arthurdw/PayDay/assets/38541241/9564069b-917c-4717-aab9-c9ab13c1d621)
 
 ## Contributions
 
-Contributions to PayDay are welcome! If you have any ideas for improvements or bug fixes, please submit a pull request. We appreciate your support in making PayDay even better!
+Contributions to PayDay are welcome! Please submit a pull request if you have any ideas for improvements or bug fixes. We appreciate your support in making PayDay even better!
 
 ## License
 
